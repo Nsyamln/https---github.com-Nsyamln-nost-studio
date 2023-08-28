@@ -6,6 +6,7 @@ import { TbBrandProducthunt } from "react-icons/tb";
 import { AiOutlineUser } from "react-icons/ai";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { BiLogOut } from "react-icons/bi";
 
 const Sidebar = () => {
   const menus = [
@@ -14,10 +15,11 @@ const Sidebar = () => {
       link: "/dashbord",
       icon: MdOutlineDashboard,
     },
-    { name: "User", link: "/myprofile", icon: AiOutlineUser },
+    { name: "My Profile", link: "/myprofile", icon: AiOutlineUser },
     { name: "Products", link: "/catalog", icon: TbBrandProducthunt },
     { name: "Cart", link: "/cart", icon: FiShoppingCart },
     { name: "Setting", link: "/setting", icon: RiSettings4Line },
+    // { name: "Logout", link: "/", icon: BiLogOut },
   ];
   const [open, setOpen] = useState(true);
   return (

@@ -1,136 +1,107 @@
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import {
-  AiFillDelete,
-  AiFillEdit,
-  AiFillPlusCircle,
-  AiFillPlusSquare,
-} from "react-icons/ai";
+import { AiFillDelete, AiFillEdit, AiFillPlusSquare } from "react-icons/ai";
+import { useNavigate, useOutletContext } from "react-router-dom";
+
 export default function Dashbord() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "MacBook Air 15”",
-      image: "/macbook_air_15.jpg",
-      price: 26999999,
-      category: "Laptop",
-    },
-    {
-      id: 2,
-      name: "iPhone 14 Pro",
-      image: "/iphone_14_pro.jpg",
-      price: 19999999,
-      category: "Smartphone",
-    },
-    {
-      id: 3,
-      name: "iPhone 14",
-      image: "/iphone_14.jpg",
-      price: 15999999,
-      category: "Smartphone",
-    },
-    {
-      id: 4,
-      name: "Apple Vision Pro",
-      image: "/apple_vision_pro.jpg",
-      price: 66999999,
-      category: "Smartphone",
-    },
-    {
-      id: 5,
-      name: "Apple Watch Series 8",
-      image: "apple_watch_series_8.jpg",
-      price: 7999999,
-      category: "Watch",
-    },
-    {
-      id: 6,
-      name: "iPad Pro",
-      image: "/ipad_pro.jpg",
-      price: 15999999,
-      category: "Tablet",
-    },
-    {
-      id: 7,
-      name: "MacBook Air 15”",
-      image: "/macbook_air_15.jpg",
-      price: 26999999,
-      category: "Laptop",
-    },
-    {
-      id: 8,
-      name: "iPhone 14 Pro",
-      image: "/iphone_14_pro.jpg",
-      price: 19999999,
-      category: "Smartphone",
-    },
-    {
-      id: 9,
-      name: "iPhone 14",
-      image: "/iphone_14.jpg",
-      price: 15999999,
-      category: "Smartphone",
-    },
-    {
-      id: 10,
-      name: "Apple Vision Pro",
-      image: "/apple_vision_pro.jpg",
-      price: 66999999,
-      category: "Headset",
-    },
-    {
-      id: 11,
-      name: "Apple Watch Series 8",
-      image: "apple_watch_series_8.jpg",
-      price: 7999999,
-      category: "Watch",
-    },
-    {
-      id: 12,
-      name: "iPad Pro",
-      image: "/ipad_pro.jpg",
-      price: 15999999,
-      category: "Tablet",
-    },
-  ]);
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState({});
+  const [editedProduct, setEditedProduct] = useState();
+
+  const user = useOutletContext()[0];
+
+  useEffect(() => {
+    api
+      .get("/products")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data.products);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, [user, navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setNewProduct({});
+    try {
+      const response = await api.post("/products/create", newProduct);
+      const message = await response.text();
+      if (response.ok) {
+        const productsResponse = await api.get("/products");
+        if (productsResponse.ok) {
+          const productsData = await productsResponse.json();
+          setProducts(productsData.products);
+        }
+        alert(message);
+      } else {
+        alert("Error: " + message);
+      }
+    } catch (error) {
+      console.error("Error submitting product:", error);
+      alert("An error occurred while submitting the product.");
+    }
+  };
 
   return (
     <div className="px-20 pb-10">
-      <form action="" className="py-10 ">
+      <form action="" className="py-10" onSubmit={handleSubmit}>
         <div className="flex gap-5 flex-wrap ">
           <TextField
             className="w-96"
             id="outlined-basic"
             label="Name"
             variant="outlined"
+            value={newProduct.name ?? ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
           />
           <TextField
             className="w-96"
             id="outlined-basic"
             label="Link Image"
             variant="outlined"
+            value={newProduct.image ?? ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, image: e.target.value })
+            }
           />
           <TextField
             className="w-96"
             id="outlined-basic"
             label="Price"
             variant="outlined"
+            value={newProduct.price ?? ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: parseInt(e.target.value) })
+            }
           />
           <TextField
             className="w-96"
             id="outlined-basic"
             label="Completenes"
             variant="outlined"
+            value={newProduct.completeness ?? ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, completeness: e.target.value })
+            }
           />
           <TextField
             className="w-96"
             id="outlined-basic"
             label="Description"
             variant="outlined"
+            value={newProduct.description ?? ""}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
           />
         </div>
       </form>
-      <button className=" py-0 pb-4   px-5 ">
+      <button className=" py-0 pb-4 px-5 ">
         <AiFillPlusSquare size={35} title="Tambah data" />
       </button>
 
@@ -162,6 +133,83 @@ export default function Dashbord() {
           ))}
         </tbody>
       </table>
+      {editedProduct && (
+        <form
+          className="dialog"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setProducts(
+              products.map((product) =>
+                product.id === editedProduct.id ? editedProduct : product
+              )
+            );
+            setEditedProduct(undefined);
+          }}
+        >
+          <h1>Edit Produk</h1>
+          <label>
+            Nama
+            <input
+              type="text"
+              value={editedProduct.name}
+              onChange={(e) =>
+                setEditedProduct({ ...editedProduct, name: e.target.value })
+              }
+              autoFocus
+            />
+          </label>
+          <label>
+            Harga
+            <input
+              type="number"
+              value={editedProduct.price}
+              onChange={(e) =>
+                setEditedProduct({
+                  ...editedProduct,
+                  price: parseInt(e.target.value),
+                })
+              }
+            />
+          </label>
+          <label>
+            Gambar
+            <input
+              type="text"
+              value={editedProduct.image}
+              onChange={(e) =>
+                setEditedProduct({ ...editedProduct, image: e.target.value })
+              }
+              autoFocus
+            />
+          </label>
+          <label>
+            Kategori
+            <select
+              value={editedProduct.category}
+              onChange={(e) =>
+                setEditedProduct({ ...editedProduct, category: e.target.value })
+              }
+            >
+              <option value="semua">Semua</option>
+              <option value="laptop">Laptop</option>
+              <option value="smartphone">Smartphone</option>
+              <option value="headset">Headset</option>
+              <option value="watch">Watch</option>
+              <option value="tablet">Tablet</option>
+            </select>
+          </label>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              type="reset"
+              variant="tonal"
+              onClick={() => setEditedProduct(undefined)}
+            >
+              Batal
+            </Button>
+            <Button>Simpan</Button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }

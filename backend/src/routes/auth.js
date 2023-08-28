@@ -8,8 +8,8 @@ const router = express.Router();
 router.use(cookieParser());
 
 router.get("/tampil", async(_req,res)=>{
-    const lihat = await conn.query(`select * from users`);
-    res.send(lihat);
+    const tampil = await conn.query(`select * from users`);
+    res.send(tampil);
 })
 
 router.post("/registrasi",async (req,res)=>{
@@ -63,7 +63,7 @@ router.post("/login", async (req, res) => {
 
 });
 
-//login
+//verif jwt
 router.use((req,res,next)=>{
     let authorization = false;
     if(req.path === "/api/login"){
@@ -94,9 +94,7 @@ router.use((req,res,next)=>{
     }
 });
 
-router.get("/me",(req,res)=>{
-    res.json(req.user);
-})
+
 
 router.post("/logout",(_req, res)=>{
     res.clearCookie("jwt").send("Logout berhasil");
@@ -104,21 +102,3 @@ router.post("/logout",(_req, res)=>{
 
 export default router;
 
-
-//router.post("/login",async(req,res)=>{
-    //     const prepare = await conn.prepare("SELECT * FROM users WHERE email ='${req.body.email}'");
-    //     const user = (await prepare.execute([req.body.email]))[0];
-    //     if(user){
-    //         if(await bcrypt.compare(req.body.password, user.password)){
-    //             const token = jwt.sign(user, process.env.SECRET_KEY);
-    //             res.cookie("jwt",token,{
-                    
-    //                 httpOnly:true,
-    //             }).send("Login Berhasil");console.log(token);
-    //         }else{
-    //             res.status(401).send("Kata sandi salah");
-    //         }
-    //     }else{
-    //         res.status(401).send("Pengguna tidak ditemukan");
-    //     }
-    // });

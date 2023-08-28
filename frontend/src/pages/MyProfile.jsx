@@ -1,44 +1,43 @@
 import React, { useState } from "react";
-import { AiOutlineFileDone } from "react-icons/ai";
+import { AiFillEdit, AiOutlineFileDone } from "react-icons/ai";
 import { MdOutlinePlace } from "react-icons/md";
-import { FiLogOut } from "react-icons/fi";
+import { BiEdit, BiLogOut } from "react-icons/bi";
 
 function MyProfile() {
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center my-5">
       <div className="flex flex-col justify-center items-center w-96">
-        <h1>Halo, Maulina!</h1>
+        <h1 className="text-3xl">Halo, Maulina!</h1>
         <img
           src="./undraw_female_avatar_efig.svg"
           className="w-64 rounded-full "
           alt=""
         />
-        <h1>Maulina Inas Nasya</h1>
+        <div className="flex flex-row">
+          <h1 className="text-2xl">Maulina Inas Nasya</h1>
+          <button>
+            <AiFillEdit size={25} />
+          </button>
+        </div>
         <h1>maulinainasnasyaa@gmail.com</h1>
-        <div>
-          <button className="flex flex-row text-2xl  items-center">
-            <MdOutlinePlace size={45} />
-            My Address
-          </button>
-          {/* <button className="flex flex-row text-2xl  items-center">
-            <BiWallet size={45} />
-            Nost Pay
-          </button> */}
-          <button
-            className="flex flex-row text-2xl  items-center"
-            onClick={() => alert("Coming Soon :)")}
-          >
-            <AiOutlineFileDone size={45} />
-            History
-          </button>
-          {/* <button className="flex flex-row text-2xl  items-center">
-            <LiaShippingFastSolid size={45} />
-            My Order
-          </button> */}
-          <button className="flex flex-row text-2xl  items-center">
-            <FiLogOut size={45} />
-            LogOut
-          </button>
+        <div className="text-xl">
+          <div className="flex flex-row items-center">
+            <MdOutlinePlace size={30} />
+            <p>alamat</p>
+          </div>
+          <hr className="my-2 text-col3" />
+          <div className="flex flex-row gap-6">
+            <button
+              className="flex w-16 rounded-lg flex-row bg-col3 justify-center h-9 items-center"
+              onClick={() => alert("Coming Soon :)")}
+            >
+              <AiOutlineFileDone size={30} />
+            </button>
+
+            <button className="flex w-16 rounded-lg flex-row bg-col3 justify-center h-9  items-center">
+              <BiLogOut size={30} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

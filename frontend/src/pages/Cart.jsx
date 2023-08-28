@@ -35,6 +35,7 @@ const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 export default function Cart() {
+  const [cart, setCart] = React.useState([]);
   return (
     <div>
       <div className=" flex flex-col items-center justify-center ">
@@ -58,22 +59,51 @@ export default function Cart() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.desc}>
+                {cart.map((product) => (
+                  <TableRow key={product.id}>
                     <TableCell>
                       <span className="flex flex-row gap-3">
-                        <button>
+                        <button
+                          onClick={() => {
+                            if (product.count > 1) {
+                              setCart(
+                                cart.map((p) =>
+                                  p.id === product.id
+                                    ? { ...p, count: p.count - 1 }
+                                    : p
+                                )
+                              );
+                            } else {
+                              setCart(cart.filter((p) => p.id !== product.id));
+                            }
+                          }}
+                        >
                           <BiMinusCircle size={25} />
                         </button>
-                        <button>
+                        <button
+                          onClick={() => {
+                            setCart(
+                              cart.map((p) =>
+                                p.id === product.id
+                                  ? { ...p, count: p.count + 1 }
+                                  : p
+                              )
+                            );
+                          }}
+                          title="Tambah"
+                        >
                           <BiPlusCircle size={25} />
                         </button>
                       </span>
                     </TableCell>
-                    <TableCell>{row.desc}</TableCell>
-                    <TableCell align="right">{row.qty}</TableCell>
-                    <TableCell align="right">{row.unit}</TableCell>
-                    <TableCell align="right">{parseInt(row.price)}</TableCell>
+                    <TableCell>{product.name}</TableCell>
+                    <TableCell align="right">
+                      {product.count.toLocaleString()}
+                    </TableCell>
+                    <TableCell align="right">{product.price}</TableCell>
+                    <TableCell align="right">
+                      {parseInt(product.price)}
+                    </TableCell>
                   </TableRow>
                 ))}
                 <TableRow>
@@ -105,6 +135,32 @@ export default function Cart() {
           </TableContainer>
         </div>
       </div>
+
+      {/* <Button onClick={() => setIsCartOpen(true)}>
+        <BsFillCartPlusFill /> {cart.reduce((a, p) => a + p.count, 0)}
+      </Button> */}
+
+      {isCheckout && (
+        <div>
+          <h1>Checkout</h1>
+          <div>
+            <h3>Opsi Pengiriman</h3>
+            <hr />
+          </div>
+          <div>
+            <h3>J&T Express</h3>
+            <p>Rp20.000</p>
+          </div>
+          <div>
+            <h1>Total Pesanan (1 Produk) :</h1>
+            <p>Rp509.000</p>
+          </div>
+          <div></div>
+          <Button onClick={handleClick()} variant="contained">
+            Buat Pesanan
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

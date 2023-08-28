@@ -9,11 +9,20 @@ import { MdOutlinePlace } from "react-icons/md";
 import { BsCalendarWeek, BsInstagram } from "react-icons/bs";
 
 export default function Setting() {
+  const handleSettingClick = () => {
+    alert("Coming soon!");
+  };
   return (
-    <div className="flex justify-center flex-wrap m-20 ">
-      <img src="./settings.svg" className="max-w-[1200px]" alt="" />
+    <div className="flex justify-center flex-wrap m-5 ">
+      <img
+        src="./settings.svg"
+        className="xl:max-w-[1200px] lg:max-w-[1000px]"
+        alt=""
+      />
       <div className="max-w-[1000px] my-2">
-        <h1 className="text-2xl font-semibold">Selamat datang di NoStudio!</h1>
+        <h1 className="text-2xl sm:text-xl font-semibold">
+          Selamat datang di NoStudio!
+        </h1>
         <p className="text-justify">
           Kami adalah destinasi yang menghidupkan kembali kenangan indah dari
           masa lalu. Di Nostalgia Studio, kami percaya bahwa setiap momen
@@ -26,15 +35,15 @@ export default function Setting() {
         <div>
           <h1 className="text-lg font-semibold">Profile Kami</h1>
           <div className="flex flex-row items-center my-1 gap-2">
-            <MdOutlinePlace size={40} className="text-gray-800 " />
+            <MdOutlinePlace size={30} className="text-gray-800 " />
             <h3>Bandung, Indonesia</h3>
           </div>
           <div className="flex flex-row items-center m-1 gap-3">
-            <BsCalendarWeek size={28} />
+            <BsCalendarWeek size={24} />
             <h3>Sabtu - Kamis</h3>
           </div>
           <div className="flex flex-row items-center my-2 ml-1 gap-3">
-            <BsInstagram size={28} />
+            <BsInstagram size={24} />
             <h3>@noStudio_</h3>
           </div>
         </div>
@@ -64,10 +73,7 @@ export default function Setting() {
           <Button variant="contained" disabled>
             versi 1.0
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => console.log("coming soon")}
-          >
+          <Button variant="contained" onClick={() => handleSettingClick()}>
             Versi 2.0
           </Button>
         </div>
